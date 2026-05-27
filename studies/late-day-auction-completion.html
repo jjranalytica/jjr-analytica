@@ -4,11 +4,12 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Late-Day Auction Completion Study — JJR Analytica</title>
-<meta name="description" content="MNQ futures late-day auction-completion research using mutually exclusive close windows, IB break direction, pre-window quintiles, and IB extension regimes.">
-<style>:root{
+<meta name="description" content="MNQ futures late-day auction-completion research using mutually exclusive close windows.">
+
+<style>
+:root{
   --bg:#050606;
   --panel:#0a0b0b;
-  --panel-2:#0e1010;
   --line:#262828;
   --line-soft:#171919;
   --text:#d7d4cc;
@@ -16,8 +17,6 @@
   --faint:#5e5c56;
   --accent:#b7b0a4;
   --good:#9bbf8e;
-  --bad:#b98b86;
-  --warn:#b4a56b;
   --shadow:0 24px 80px rgba(0,0,0,.45);
   --mono:"SFMono-Regular","Cascadia Code","Roboto Mono","Courier New",monospace;
   --sans:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
@@ -29,178 +28,516 @@ body{
   background:radial-gradient(circle at 70% 0%,rgba(255,255,255,.045),transparent 32%),linear-gradient(180deg,#050606 0%,#080909 42%,#050606 100%);
   color:var(--text);
   font-family:var(--sans);
-  letter-spacing:.01em;
 }
 a{color:inherit;text-decoration:none}
-button,input,select{font:inherit}
-.noise:before{content:"";position:fixed;inset:0;pointer-events:none;opacity:.12;mix-blend-mode:overlay;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 320 320' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.45'/%3E%3C/svg%3E")}
-.site-header{height:72px;border-bottom:1px solid var(--line-soft);display:flex;align-items:center;justify-content:space-between;padding:0 clamp(22px,5vw,84px);position:sticky;top:0;background:rgba(5,6,6,.82);backdrop-filter:blur(16px);z-index:10}
-.logo{display:flex;gap:18px;align-items:baseline}.logo-mark{font-family:var(--mono);font-size:26px;letter-spacing:.12em}.logo-word{font-family:var(--mono);font-size:12px;letter-spacing:.42em;color:var(--muted);text-transform:uppercase}
+button,input,textarea{font:inherit}
+.noise:before{
+  content:"";
+  position:fixed;
+  inset:0;
+  pointer-events:none;
+  opacity:.12;
+  mix-blend-mode:overlay;
+  background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 320 320' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.45'/%3E%3C/svg%3E")
+}
+.site-header{
+  height:72px;
+  border-bottom:1px solid var(--line-soft);
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  padding:0 clamp(22px,5vw,84px);
+  position:sticky;
+  top:0;
+  background:rgba(5,6,6,.82);
+  backdrop-filter:blur(16px);
+  z-index:10;
+}
+.logo{display:flex;gap:18px;align-items:baseline}
+.logo-mark{font-family:var(--mono);font-size:26px;letter-spacing:.12em}
+.logo-word{font-family:var(--mono);font-size:12px;letter-spacing:.42em;color:var(--muted);text-transform:uppercase}
 .nav{display:flex;align-items:center;gap:40px;font-family:var(--mono);font-size:12px;text-transform:uppercase;letter-spacing:.18em;color:var(--muted)}
-.nav a:hover{color:var(--text)}.nav-cta{border:1px solid var(--line);padding:12px 16px;background:#101111;color:var(--text)}.menu-dots{letter-spacing:.2em;color:var(--faint)}
-main{overflow:hidden}.container{width:min(1120px,calc(100% - 44px));margin:0 auto}.hero{min-height:560px;display:grid;grid-template-columns:1fr 1.05fr;gap:60px;align-items:center;border-bottom:1px solid var(--line-soft);position:relative}.kicker{font-family:var(--mono);font-size:12px;letter-spacing:.22em;text-transform:uppercase;color:var(--muted);border:1px solid var(--line);display:inline-flex;padding:8px 10px;margin-bottom:36px;background:rgba(255,255,255,.015)}
-h1{font-family:var(--mono);font-weight:400;letter-spacing:.22em;text-transform:uppercase;font-size:clamp(34px,5vw,62px);line-height:1.18;margin:0 0 32px}.lead{max-width:520px;color:#aaa79f;line-height:1.85;font-size:15px}.hero-actions{display:flex;gap:18px;margin-top:36px;align-items:center}.btn{display:inline-flex;align-items:center;gap:12px;border:1px solid var(--line);background:#111212;color:var(--text);padding:15px 22px;font-family:var(--mono);font-size:12px;text-transform:uppercase;letter-spacing:.16em}.btn:hover{background:#191a1a;border-color:#3a3b3b}.btn.primary{background:#d8d3ca;color:#080909;border-color:#d8d3ca}.btn.ghost{background:transparent;color:var(--muted)}
-.market-map{height:360px;border-left:1px solid var(--line-soft);position:relative;opacity:.82}.market-map:before{content:"";position:absolute;inset:8% 0;background:repeating-linear-gradient(90deg,transparent 0 35px,rgba(255,255,255,.07) 36px,transparent 37px),repeating-linear-gradient(0deg,transparent 0 35px,rgba(255,255,255,.05) 36px,transparent 37px);mask-image:radial-gradient(ellipse at center,black 0%,transparent 72%)}.market-map:after{content:"";position:absolute;inset:0;background:radial-gradient(ellipse at 50% 60%,rgba(215,212,204,.28),transparent 25%),linear-gradient(10deg,transparent 35%,rgba(215,212,204,.18),transparent 52%);clip-path:polygon(0 66%,12% 58%,24% 64%,35% 45%,48% 52%,60% 39%,73% 49%,86% 33%,100% 43%,100% 100%,0 100%);filter:blur(.2px)}
-.trait-strip{display:grid;grid-template-columns:repeat(4,1fr);gap:0;border-bottom:1px solid var(--line-soft)}.trait{padding:22px 0;font-family:var(--mono);font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted)}.trait:before{content:"□";margin-right:12px;color:var(--faint)}
-.section{padding:70px 0;border-bottom:1px solid var(--line-soft)}.split{display:grid;grid-template-columns:1.2fr .9fr;gap:80px;align-items:start}.eyebrow{font-family:var(--mono);font-size:11px;letter-spacing:.22em;text-transform:uppercase;color:var(--faint);margin-bottom:18px}.section h2{font-family:var(--mono);font-size:29px;line-height:1.45;letter-spacing:.18em;text-transform:uppercase;font-weight:400;margin:0}.body-copy{color:#a5a29a;line-height:1.8;font-size:15px}.research-table{margin-top:42px;border:1px solid var(--line);background:rgba(255,255,255,.015);box-shadow:var(--shadow)}table{width:100%;border-collapse:collapse}th{font-family:var(--mono);font-size:11px;text-transform:uppercase;letter-spacing:.16em;color:var(--muted);font-weight:400;text-align:left;padding:18px 24px;border-bottom:1px solid var(--line)}td{padding:21px 24px;border-bottom:1px solid var(--line-soft);color:#c9c5bc;font-family:var(--mono);font-size:14px}tr:last-child td{border-bottom:0}.spark{height:20px;width:88px;display:inline-block;background:linear-gradient(90deg,#3f403e 10%,#77756d 10% 20%,#51524f 20% 32%,#a7a399 32% 40%,#5f605b 40% 55%,#77756d 55% 66%,#42433f 66% 100%);clip-path:polygon(0 70%,9% 45%,18% 60%,27% 35%,36% 25%,45% 50%,54% 28%,63% 42%,72% 22%,81% 58%,90% 42%,100% 52%,100% 100%,0 100%);opacity:.75}.table-link{display:inline-block;padding:18px 24px;font-family:var(--mono);font-size:12px;text-transform:uppercase;letter-spacing:.18em;color:var(--accent)}
-.method-grid{display:grid;grid-template-columns:repeat(6,1fr);border:1px solid var(--line);margin-top:36px}.method{padding:28px 22px;border-right:1px solid var(--line-soft);min-height:150px}.method:last-child{border-right:0}.method .icon{font-size:23px;color:var(--accent);margin-bottom:18px}.method h3{font-family:var(--mono);font-size:12px;letter-spacing:.18em;text-transform:uppercase;font-weight:400}.method p{font-size:13px;line-height:1.7;color:var(--muted)}
-.card-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:24px}.card{border:1px solid var(--line);background:linear-gradient(180deg,rgba(255,255,255,.025),rgba(255,255,255,.008));padding:26px;min-height:210px}.card h3{font-family:var(--mono);font-weight:400;letter-spacing:.12em;text-transform:uppercase;margin-top:0}.metric{font-family:var(--mono);font-size:38px;color:var(--accent);margin:22px 0 6px}.muted{color:var(--muted)}.small{font-size:13px;line-height:1.7}.study-hero{padding:62px 0 28px;border-bottom:1px solid var(--line-soft)}.breadcrumb{font-family:var(--mono);font-size:11px;text-transform:uppercase;letter-spacing:.14em;color:var(--faint);margin-bottom:30px}.study-title{font-family:var(--mono);font-size:42px;letter-spacing:.16em;text-transform:uppercase;font-weight:400;margin:0 0 12px}.meta-bar{display:grid;grid-template-columns:repeat(5,1fr);border:1px solid var(--line);margin-top:34px}.meta{padding:20px;border-right:1px solid var(--line-soft);text-align:center}.meta:last-child{border-right:0}.meta-label{font-family:var(--mono);font-size:10px;text-transform:uppercase;letter-spacing:.16em;color:var(--faint)}.meta-value{margin-top:10px;color:var(--text)}.panel{border:1px solid var(--line);background:rgba(255,255,255,.014);padding:28px}.panel h3{font-family:var(--mono);font-weight:400;text-transform:uppercase;letter-spacing:.12em;margin-top:0}.result-layout{display:grid;grid-template-columns:.9fr 1.8fr;gap:24px}.big-prob{font-family:var(--mono);font-size:72px;color:var(--good);line-height:1}.chart-bars{height:190px;display:flex;align-items:end;gap:16px;padding:16px;border-left:1px solid var(--line-soft);border-bottom:1px solid var(--line-soft)}.bar{flex:1;background:linear-gradient(180deg,#bdb8ad,#353735);min-height:30px}.bar:nth-child(1){height:38%}.bar:nth-child(2){height:56%}.bar:nth-child(3){height:80%}.bar:nth-child(4){height:72%}.bar:nth-child(5){height:48%}.bar:nth-child(6){height:30%}.footer{padding:48px 0;display:grid;grid-template-columns:1.3fr .7fr .7fr 1.2fr;gap:50px;color:var(--muted)}.footer h4{font-family:var(--mono);font-size:11px;text-transform:uppercase;letter-spacing:.18em;color:var(--text);font-weight:400}.email-box{display:flex;border:1px solid var(--line);margin-top:18px}.email-box input{flex:1;background:#0a0b0b;color:var(--text);border:0;padding:14px}.email-box button{width:48px;background:#2a2a28;color:var(--text);border:0}.disclaimer{border-top:1px solid var(--line-soft);padding:18px 0;color:var(--faint);font-family:var(--mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase;text-align:center}
-.hero-visual{height:380px;border-left:1px solid var(--line-soft);position:relative;display:flex;align-items:center;justify-content:center;overflow:hidden;opacity:.92}.hero-visual:before{content:"";position:absolute;inset:0;z-index:2;pointer-events:none;background:radial-gradient(ellipse at 52% 52%,transparent 0%,rgba(5,6,6,.10) 36%,rgba(5,6,6,.72) 100%),linear-gradient(90deg,rgba(5,6,6,.35),transparent 30%,rgba(5,6,6,.18));}.hero-visual:after{content:"";position:absolute;inset:0;z-index:3;pointer-events:none;background:repeating-linear-gradient(0deg,rgba(255,255,255,.025) 0 1px,transparent 1px 6px);mix-blend-mode:overlay;opacity:.28}.hero-visual img{width:100%;height:100%;object-fit:cover;object-position:center;filter:grayscale(1) contrast(1.08) brightness(.74);mix-blend-mode:screen;transform:scale(1.04)}
-@media(max-width:900px){.hero,.split,.result-layout{grid-template-columns:1fr}.nav{display:none}.trait-strip,.method-grid,.card-grid,.meta-bar,.footer{grid-template-columns:1fr}.method,.meta{border-right:0;border-bottom:1px solid var(--line-soft)}h1{letter-spacing:.13em}.hero{padding:70px 0}.market-map{height:250px}.hero-visual{height:260px;border-left:0}.research-table{overflow:auto}td,th{min-width:150px}}
-
-.timeline-grid{display:grid;grid-template-columns:repeat(6,1fr);gap:16px;margin-top:36px}.timeline-grid.seven{grid-template-columns:repeat(7,1fr)}.timeline-grid.four{grid-template-columns:repeat(4,1fr)}.timeline-step{border:1px solid var(--line);background:rgba(255,255,255,.012);padding:22px;min-height:150px}.timeline-step h3{font-family:var(--mono);font-size:12px;letter-spacing:.18em;text-transform:uppercase;font-weight:400;margin:12px 0}.timeline-step p{font-size:13px;line-height:1.7;color:var(--muted)}.step-no{font-family:var(--mono);font-size:11px;letter-spacing:.18em;color:var(--accent)}
-.logic-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:24px}.logic-card{border:1px solid var(--line);background:rgba(255,255,255,.012);padding:24px}.logic-card h3{font-family:var(--mono);font-weight:400;letter-spacing:.14em;text-transform:uppercase;margin-top:0}.logic-card pre,.panel pre{margin:14px 0 0;background:#0a0b0b;border:1px solid var(--line-soft);padding:16px;white-space:pre-wrap;font-family:var(--mono);font-size:12px;line-height:1.8;color:#d4d0c8}.formula{font-family:var(--mono);font-size:20px;line-height:1.6;color:var(--accent);margin:10px 0 18px}.formula.large{font-size:28px}.metrics-grid{grid-template-columns:repeat(3,1fr)}.rules-grid{grid-template-columns:repeat(3,1fr)}
-@media(max-width:900px){.timeline-grid,.timeline-grid.seven,.timeline-grid.four,.logic-grid,.metrics-grid,.rules-grid{grid-template-columns:1fr}}
-
-
-.study-callout{border:1px solid var(--line);background:linear-gradient(180deg,rgba(255,255,255,.026),rgba(255,255,255,.008));padding:28px;margin-top:24px}
-.study-callout strong{color:var(--accent);font-weight:400}
+.nav a:hover{color:var(--text)}
+.nav-cta{border:1px solid var(--line);padding:12px 16px;background:#101111;color:var(--text)}
+.menu-dots{letter-spacing:.2em;color:var(--faint)}
+.container{width:min(1120px,calc(100% - 44px));margin:0 auto}
+.study-hero{padding:62px 0 28px;border-bottom:1px solid var(--line-soft)}
+.breadcrumb{font-family:var(--mono);font-size:11px;text-transform:uppercase;letter-spacing:.14em;color:var(--faint);margin-bottom:30px}
+.kicker{font-family:var(--mono);font-size:12px;letter-spacing:.22em;text-transform:uppercase;color:var(--muted);border:1px solid var(--line);display:inline-flex;padding:8px 10px;margin-bottom:36px;background:rgba(255,255,255,.015)}
+.study-title{font-family:var(--mono);font-size:42px;letter-spacing:.16em;text-transform:uppercase;font-weight:400;margin:0 0 12px}
+.lead{max-width:720px;color:#aaa79f;line-height:1.85;font-size:15px}
+.meta-bar{display:grid;grid-template-columns:repeat(5,1fr);border:1px solid var(--line);margin-top:34px}
+.meta{padding:20px;border-right:1px solid var(--line-soft);text-align:center}
+.meta:last-child{border-right:0}
+.meta-label{font-family:var(--mono);font-size:10px;text-transform:uppercase;letter-spacing:.16em;color:var(--faint)}
+.meta-value{margin-top:10px;color:var(--text)}
+.section{padding:70px 0;border-bottom:1px solid var(--line-soft)}
+.split{display:grid;grid-template-columns:1.2fr .9fr;gap:80px;align-items:start}
+.eyebrow{font-family:var(--mono);font-size:11px;letter-spacing:.22em;text-transform:uppercase;color:var(--faint);margin-bottom:18px}
+h2{font-family:var(--mono);font-size:29px;line-height:1.45;letter-spacing:.18em;text-transform:uppercase;font-weight:400;margin:0}
+.body-copy{color:#a5a29a;line-height:1.8;font-size:15px}
 .metric-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:18px;margin-top:34px}
 .metric-card{border:1px solid var(--line);background:rgba(255,255,255,.014);padding:24px;min-height:150px}
 .metric-label{font-family:var(--mono);font-size:10px;text-transform:uppercase;letter-spacing:.16em;color:var(--faint)}
-.metric-value{font-family:var(--mono);font-size:34px;color:var(--accent);margin:14px 0 8px}.metric-note{font-size:13px;line-height:1.7;color:var(--muted)}
-.window-track{display:grid;grid-template-columns:15.09fr 32.72fr 17.48fr;gap:8px;margin-top:28px;align-items:end}.window-bar{border:1px solid var(--line);background:linear-gradient(180deg,#bdb8ad,#353735);min-height:46px;padding:14px;font-family:var(--mono);font-size:11px;color:#080909}.window-bar:nth-child(1){height:80px;opacity:.62}.window-bar:nth-child(2){height:150px;opacity:.92}.window-bar:nth-child(3){height:96px;opacity:.72}.pill-row{display:flex;flex-wrap:wrap;gap:10px;margin-top:22px}.pill{border:1px solid var(--line);color:var(--muted);font-family:var(--mono);font-size:11px;text-transform:uppercase;letter-spacing:.12em;padding:9px 11px;background:rgba(255,255,255,.012)}
-.interpretation-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:24px}.note-card{border:1px solid var(--line);background:rgba(255,255,255,.012);padding:24px}.note-card h3{font-family:var(--mono);font-size:13px;letter-spacing:.16em;text-transform:uppercase;font-weight:400;margin-top:0}.tag-good{color:var(--good)}.tag-warn{color:var(--warn)}.tag-bad{color:var(--bad)}
-@media(max-width:900px){.metric-grid,.interpretation-grid{grid-template-columns:1fr}.window-track{grid-template-columns:1fr}.window-bar{height:auto!important}}
+.metric-value{font-family:var(--mono);font-size:34px;color:var(--accent);margin:14px 0 8px}
+.metric-note{font-size:13px;line-height:1.7;color:var(--muted)}
+.research-table{margin-top:42px;border:1px solid var(--line);background:rgba(255,255,255,.015);box-shadow:var(--shadow);overflow:auto}
+table{width:100%;border-collapse:collapse}
+th{font-family:var(--mono);font-size:11px;text-transform:uppercase;letter-spacing:.16em;color:var(--muted);font-weight:400;text-align:left;padding:18px 24px;border-bottom:1px solid var(--line)}
+td{padding:21px 24px;border-bottom:1px solid var(--line-soft);color:#c9c5bc;font-family:var(--mono);font-size:14px}
+tr:last-child td{border-bottom:0}
+.pill-row{display:flex;flex-wrap:wrap;gap:10px;margin-top:22px}
+.pill{border:1px solid var(--line);color:var(--muted);font-family:var(--mono);font-size:11px;text-transform:uppercase;letter-spacing:.12em;padding:9px 11px;background:rgba(255,255,255,.012)}
+.interpretation-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:24px}
+.note-card{border:1px solid var(--line);background:rgba(255,255,255,.012);padding:24px}
+.note-card h3{font-family:var(--mono);font-size:13px;letter-spacing:.16em;text-transform:uppercase;font-weight:400;margin-top:0}
+.small{font-size:13px;line-height:1.7}
+.muted{color:var(--muted)}
+.btn{display:inline-flex;align-items:center;gap:12px;border:1px solid var(--line);background:#111212;color:var(--text);padding:15px 22px;font-family:var(--mono);font-size:12px;text-transform:uppercase;letter-spacing:.16em;cursor:pointer}
+.btn:hover{background:#191a1a;border-color:#3a3b3b}
+.btn.ghost{background:transparent;color:var(--muted)}
+.code-launch-row{display:flex;align-items:center;gap:16px;margin-top:28px;flex-wrap:wrap}
+.code-note{font-family:var(--mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--faint)}
+.code-modal{position:fixed;inset:0;display:none;align-items:center;justify-content:center;padding:22px;background:rgba(0,0,0,.72);backdrop-filter:blur(10px);z-index:99}
+.code-modal.open{display:flex}
+.code-modal-panel{width:min(920px,calc(100vw - 36px));max-height:78vh;border:1px solid var(--line);background:#080909;box-shadow:var(--shadow);display:flex;flex-direction:column}
+.code-modal-header{display:flex;align-items:center;justify-content:space-between;gap:20px;padding:16px 18px;border-bottom:1px solid var(--line-soft)}
+.code-modal-title{font-family:var(--mono);font-size:12px;text-transform:uppercase;letter-spacing:.16em;color:var(--text)}
+.code-modal-actions{display:flex;gap:10px;align-items:center}
+.code-modal-actions button{border:1px solid var(--line);background:#111212;color:var(--text);font-family:var(--mono);font-size:11px;text-transform:uppercase;letter-spacing:.12em;padding:10px 12px;cursor:pointer}
+.copy-status{font-family:var(--mono);font-size:11px;color:var(--good);min-width:48px}
+#codeText{width:100%;height:58vh;border:0;outline:0;resize:none;padding:18px;overflow:auto;white-space:pre;font-family:var(--mono);font-size:11px;line-height:1.65;color:#d4d0c8;background:#060707}
+.footer{padding:48px 0;display:grid;grid-template-columns:1.3fr .7fr .7fr 1.2fr;gap:50px;color:var(--muted)}
+.footer h4{font-family:var(--mono);font-size:11px;text-transform:uppercase;letter-spacing:.18em;color:var(--text);font-weight:400}
+.email-box{display:flex;border:1px solid var(--line);margin-top:18px}
+.email-box input{flex:1;background:#0a0b0b;color:var(--text);border:0;padding:14px}
+.email-box button{width:48px;background:#2a2a28;color:var(--text);border:0}
+.disclaimer{border-top:1px solid var(--line-soft);padding:18px 0;color:var(--faint);font-family:var(--mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase;text-align:center}
+@media(max-width:900px){
+  .split,.metric-grid,.interpretation-grid,.meta-bar,.footer{grid-template-columns:1fr}
+  .nav{display:none}
+  .meta{border-right:0;border-bottom:1px solid var(--line-soft)}
+  td,th{min-width:170px}
+}
 </style>
 </head>
+
 <body class="noise">
+
 <header class="site-header">
-  <a class="logo" href="index.html"><span class="logo-mark">JJR</span><span class="logo-word">Analytica</span></a>
+  <a class="logo" href="../index.html">
+    <span class="logo-mark">JJR</span>
+    <span class="logo-word">Analytica</span>
+  </a>
   <nav class="nav">
-    <a href="research.html">Research</a>
-    <a href="methodology.html">Methodology</a>
-    <a href="about.html">About</a>
-    <a class="nav-cta" href="index.html#join">Join Research List →</a>
+    <a href="../research.html">Research</a>
+    <a href="../methodology.html">Methodology</a>
+    <a href="../about.html">About</a>
+    <a class="nav-cta" href="../index.html#join">Join Research List →</a>
     <span class="menu-dots">⋯</span>
   </nav>
 </header>
 
 <main>
-  <section class="container study-hero">
-    <div class="breadcrumb">Research / Studies / Late-Day Auction Completion</div>
-    <div class="kicker">Intraday Market Structure</div>
-    <h1 class="study-title">Late-Day Auction Completion Study</h1>
-    <p class="lead">MNQ futures study testing whether the final daily high or low forms late in the session, using mutually exclusive close windows and regime-based conditioning.</p>
-    <div class="meta-bar">
-      <div class="meta"><div class="meta-label">Instrument</div><div class="meta-value">MNQ</div></div>
-      <div class="meta"><div class="meta-label">Study Window</div><div class="meta-value">2020-12-15 → 2026-02-25</div></div>
-      <div class="meta"><div class="meta-label">Session</div><div class="meta-value">09:30–16:15 EST</div></div>
-      <div class="meta"><div class="meta-label">Method</div><div class="meta-value">Mutually Exclusive Windows</div></div>
-      <div class="meta"><div class="meta-label">Intervals</div><div class="meta-value">Wilson 95%</div></div>
-    </div>
-  </section>
 
-  <section class="section">
-    <div class="container">
-      <div class="split">
-        <div>
-          <div class="eyebrow">Executive Finding</div>
-          <h2>15:00–16:00 EST is the primary late-day auction-completion window.</h2>
-        </div>
-        <p class="body-copy">The dominant signal is not a blind breakout trigger. The research is better framed as a risk-regime model: identify when the market is more likely to complete a new daily extreme late, then manage continuation, exhaustion, and rejection risk accordingly.</p>
-      </div>
-      <div class="metric-grid">
-        <div class="metric-card"><div class="metric-label">Close2h-only</div><div class="metric-value">15.09%</div><div class="metric-note">P(day high/low in 14:00–15:00). Sample: 196 / 1299. CI: 13.25%–17.14%.</div></div>
-        <div class="metric-card"><div class="metric-label">Close1h-only</div><div class="metric-value">32.72%</div><div class="metric-note">P(day high/low in 15:00–16:00). Sample: 425 / 1299. CI: 30.22%–35.32%.</div></div>
-        <div class="metric-card"><div class="metric-label">Last15-only</div><div class="metric-value">17.48%</div><div class="metric-note">P(day high/low in 16:00–16:15). Sample: 227 / 1299. CI: 15.51%–19.64%.</div></div>
-        <div class="metric-card"><div class="metric-label">Best Regime</div><div class="metric-value">52.11%</div><div class="metric-note">P(high/low 15:00–16:00 | max IB extension 1.25–1.50). Strong continuation regime.</div></div>
-      </div>
-      <div class="window-track" aria-label="Late-day window probability bars">
-        <div class="window-bar">14:00–15:00<br>15.09%</div>
-        <div class="window-bar">15:00–16:00<br>32.72%</div>
-        <div class="window-bar">16:00–16:15<br>17.48%</div>
-      </div>
-    </div>
-  </section>
+<section class="container study-hero">
+  <div class="breadcrumb">Research / Studies / Late-Day Auction Completion</div>
+  <div class="kicker">Intraday Market Structure</div>
+  <h1 class="study-title">Late-Day Auction Completion Study</h1>
+  <p class="lead">MNQ futures study testing whether the final daily high or low forms late in the session, using mutually exclusive close windows and regime-based conditioning.</p>
 
-  <section class="section">
-    <div class="container">
-      <div class="eyebrow">Definitions</div>
-      <div class="research-table">
-        <table>
-          <thead><tr><th>Object</th><th>Definition</th><th>Use</th></tr></thead>
-          <tbody>
-            <tr><td>IB</td><td>09:30–10:30 EST initial balance high, low, and range.</td><td>Core structure.</td></tr>
-            <tr><td>Close2h-only</td><td>14:00–15:00 EST mutually exclusive bucket.</td><td>Early late-day auction.</td></tr>
-            <tr><td>Close1h-only</td><td>15:00–16:00 EST mutually exclusive bucket.</td><td>Primary late-day auction window.</td></tr>
-            <tr><td>Last15-only</td><td>16:00–16:15 EST mutually exclusive bucket.</td><td>Post-cash spillover / final impulse.</td></tr>
-          </tbody>
-        </table>
-      </div>
-    </div>
-  </section>
+  <div class="code-launch-row">
+    <button class="btn ghost" type="button" data-open-code>View Python Code →</button>
+    <span class="code-note">Open compact copy-ready research code.</span>
+  </div>
 
-  <section class="section">
-    <div class="container">
-      <div class="split">
-        <div><div class="eyebrow">Conditional on IB Break</div><h2>IB break direction improves context, but does not justify blind chasing.</h2></div>
-        <p class="body-copy">The upside continuation side is cleaner than downside continuation after IB low break, but this is a moderate asymmetry, not a deterministic setup.</p>
-      </div>
-      <div class="research-table">
-        <table>
-          <thead><tr><th>Conditional Probability</th><th>Sample</th><th>Probability</th><th>95% CI</th></tr></thead>
-          <tbody>
-            <tr><td>P(new day high 14:00–15:00 | IB High Break)</td><td>108 / 809</td><td>13.35%</td><td>11.18%–15.87%</td></tr>
-            <tr><td>P(new day high 15:00–16:00 | IB High Break)</td><td>249 / 809</td><td>30.78%</td><td>27.70%–34.04%</td></tr>
-            <tr><td>P(new day high 16:00–16:15 | IB High Break)</td><td>133 / 809</td><td>16.44%</td><td>14.05%–19.15%</td></tr>
-            <tr><td>P(new day low 14:00–15:00 | IB Low Break)</td><td>88 / 740</td><td>11.89%</td><td>9.75%–14.42%</td></tr>
-            <tr><td>P(new day low 15:00–16:00 | IB Low Break)</td><td>176 / 740</td><td>23.78%</td><td>20.86%–26.98%</td></tr>
-            <tr><td>P(new day low 16:00–16:15 | IB Low Break)</td><td>94 / 740</td><td>12.70%</td><td>10.49%–15.30%</td></tr>
-          </tbody>
-        </table>
-      </div>
-    </div>
-  </section>
+  <div class="meta-bar">
+    <div class="meta"><div class="meta-label">Instrument</div><div class="meta-value">MNQ</div></div>
+    <div class="meta"><div class="meta-label">Study Window</div><div class="meta-value">2020-12-15 → 2026-02-25</div></div>
+    <div class="meta"><div class="meta-label">Session</div><div class="meta-value">09:30–16:15 EST</div></div>
+    <div class="meta"><div class="meta-label">Method</div><div class="meta-value">Mutually Exclusive Windows</div></div>
+    <div class="meta"><div class="meta-label">Intervals</div><div class="meta-value">Wilson 95%</div></div>
+  </div>
+</section>
 
-  <section class="section">
-    <div class="container">
-      <div class="split">
-        <div><div class="eyebrow">Regime Layer</div><h2>IB extension is the strongest variable identified so far.</h2></div>
-        <p class="body-copy">The cleanest continuation zone appears near 1.25x to 2.00x IB extension. Above 2.00x IB, the response weakens, which may indicate exhaustion or that the day auction completed earlier.</p>
+<section class="section">
+  <div class="container">
+    <div class="split">
+      <div>
+        <div class="eyebrow">Executive Finding</div>
+        <h2>15:00–16:00 EST is the primary late-day auction-completion window.</h2>
       </div>
-      <div class="research-table">
-        <table>
-          <thead><tr><th>Conditional Probability</th><th>Probability</th><th>Regime Read</th></tr></thead>
-          <tbody>
-            <tr><td>P(high/low 15:00–16:00 | max IB ext 0–0.25)</td><td>14.11%</td><td>Balance / poor continuation</td></tr>
-            <tr><td>P(high/low 15:00–16:00 | max IB ext 0.25–0.50)</td><td>30.43%</td><td>Moderate auction</td></tr>
-            <tr><td>P(high/low 15:00–16:00 | max IB ext 0.50–0.75)</td><td>33.84%</td><td>Moderate directional</td></tr>
-            <tr><td>P(high/low 15:00–16:00 | max IB ext 1.00–1.25)</td><td>38.17%</td><td>Transition</td></tr>
-            <tr><td>P(high/low 15:00–16:00 | max IB ext 1.25–1.50)</td><td>52.11%</td><td>Strong continuation regime</td></tr>
-            <tr><td>P(high/low 15:00–16:00 | max IB ext 1.50–2.00)</td><td>50.53%</td><td>Strong continuation regime</td></tr>
-            <tr><td>P(high/low 15:00–16:00 | max IB ext 2.00+)</td><td>41.46%</td><td>Extreme / possible exhaustion</td></tr>
-          </tbody>
-        </table>
-      </div>
-      <div class="pill-row">
-        <span class="pill">Primary Time: 15:00–16:00 EST</span>
-        <span class="pill">Main Regime: IB Extension</span>
-        <span class="pill">Use Case: Risk Intelligence</span>
-        <span class="pill">Not A Blind Signal</span>
-      </div>
+      <p class="body-copy">The dominant signal is not a blind breakout trigger. The research is better framed as a risk-regime model: identify when the market is more likely to complete a new daily extreme late, then manage continuation, exhaustion, and rejection risk accordingly.</p>
     </div>
-  </section>
 
-  <section class="section">
-    <div class="container">
-      <div class="eyebrow">Strategic Interpretation</div>
-      <div class="interpretation-grid">
-        <article class="note-card"><h3 class="tag-good">What the study supports</h3><p class="small muted">Monitor the 15:00–16:00 window more closely, especially when the market has already extended 1.25x–2.00x the IB range. Treat that state as a continuation-risk regime.</p></article>
-        <article class="note-card"><h3 class="tag-warn">What it does not prove</h3><p class="small muted">Low breakout probability does not automatically imply a high-probability fade. P(not breakout) is not the same as P(mean reversion).</p></article>
-        <article class="note-card"><h3>Decision layer</h3><p class="small muted">Sizing should become more cautious in low-probability breakout states. Fade logic needs rejection evidence, not just a low continuation probability.</p></article>
-        <article class="note-card"><h3>Next study</h3><p class="small muted">P(close back inside IB | IB extension bucket + late high/low break). This separates continuation, exhaustion, and balance.</p></article>
-      </div>
+    <div class="metric-grid">
+      <div class="metric-card"><div class="metric-label">Close2h-only</div><div class="metric-value">15.09%</div><div class="metric-note">P(day high/low in 14:00–15:00). Sample: 196 / 1299. CI: 13.25%–17.14%.</div></div>
+      <div class="metric-card"><div class="metric-label">Close1h-only</div><div class="metric-value">32.72%</div><div class="metric-note">P(day high/low in 15:00–16:00). Sample: 425 / 1299. CI: 30.22%–35.32%.</div></div>
+      <div class="metric-card"><div class="metric-label">Last15-only</div><div class="metric-value">17.48%</div><div class="metric-note">P(day high/low in 16:00–16:15). Sample: 227 / 1299. CI: 15.51%–19.64%.</div></div>
+      <div class="metric-card"><div class="metric-label">Best Regime</div><div class="metric-value">52.11%</div><div class="metric-note">P(high/low 15:00–16:00 | max IB extension 1.25–1.50).</div></div>
     </div>
-  </section>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container">
+    <div class="eyebrow">Definitions</div>
+    <div class="research-table">
+      <table>
+        <thead><tr><th>Object</th><th>Definition</th><th>Use</th></tr></thead>
+        <tbody>
+          <tr><td>IB</td><td>09:30–10:30 EST initial balance high, low, and range.</td><td>Core structure.</td></tr>
+          <tr><td>Close2h-only</td><td>14:00–15:00 EST mutually exclusive bucket.</td><td>Early late-day auction.</td></tr>
+          <tr><td>Close1h-only</td><td>15:00–16:00 EST mutually exclusive bucket.</td><td>Primary late-day auction window.</td></tr>
+          <tr><td>Last15-only</td><td>16:00–16:15 EST mutually exclusive bucket.</td><td>Post-cash spillover / final impulse.</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container">
+    <div class="split">
+      <div><div class="eyebrow">Conditional on IB Break</div><h2>IB break direction improves context, but does not justify blind chasing.</h2></div>
+      <p class="body-copy">The upside continuation side is cleaner than downside continuation after IB low break, but this is a moderate asymmetry, not a deterministic setup.</p>
+    </div>
+
+    <div class="research-table">
+      <table>
+        <thead><tr><th>Conditional Probability</th><th>Sample</th><th>Probability</th><th>95% CI</th></tr></thead>
+        <tbody>
+          <tr><td>P(new day high 14:00–15:00 | IB High Break)</td><td>108 / 809</td><td>13.35%</td><td>11.18%–15.87%</td></tr>
+          <tr><td>P(new day high 15:00–16:00 | IB High Break)</td><td>249 / 809</td><td>30.78%</td><td>27.70%–34.04%</td></tr>
+          <tr><td>P(new day high 16:00–16:15 | IB High Break)</td><td>133 / 809</td><td>16.44%</td><td>14.05%–19.15%</td></tr>
+          <tr><td>P(new day low 14:00–15:00 | IB Low Break)</td><td>88 / 740</td><td>11.89%</td><td>9.75%–14.42%</td></tr>
+          <tr><td>P(new day low 15:00–16:00 | IB Low Break)</td><td>176 / 740</td><td>23.78%</td><td>20.86%–26.98%</td></tr>
+          <tr><td>P(new day low 16:00–16:15 | IB Low Break)</td><td>94 / 740</td><td>12.70%</td><td>10.49%–15.30%</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container">
+    <div class="split">
+      <div><div class="eyebrow">Regime Layer</div><h2>IB extension is the strongest variable identified so far.</h2></div>
+      <p class="body-copy">The cleanest continuation zone appears near 1.25x to 2.00x IB extension. Above 2.00x IB, the response weakens, which may indicate exhaustion or that the day auction completed earlier.</p>
+    </div>
+
+    <div class="research-table">
+      <table>
+        <thead><tr><th>Conditional Probability</th><th>Probability</th><th>Regime Read</th></tr></thead>
+        <tbody>
+          <tr><td>P(high/low 15:00–16:00 | max IB ext 0–0.25)</td><td>14.11%</td><td>Balance / poor continuation</td></tr>
+          <tr><td>P(high/low 15:00–16:00 | max IB ext 0.25–0.50)</td><td>30.43%</td><td>Moderate auction</td></tr>
+          <tr><td>P(high/low 15:00–16:00 | max IB ext 0.50–0.75)</td><td>33.84%</td><td>Moderate directional</td></tr>
+          <tr><td>P(high/low 15:00–16:00 | max IB ext 1.00–1.25)</td><td>38.17%</td><td>Transition</td></tr>
+          <tr><td>P(high/low 15:00–16:00 | max IB ext 1.25–1.50)</td><td>52.11%</td><td>Strong continuation regime</td></tr>
+          <tr><td>P(high/low 15:00–16:00 | max IB ext 1.50–2.00)</td><td>50.53%</td><td>Strong continuation regime</td></tr>
+          <tr><td>P(high/low 15:00–16:00 | max IB ext 2.00+)</td><td>41.46%</td><td>Extreme / possible exhaustion</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="pill-row">
+      <span class="pill">Primary Time: 15:00–16:00 EST</span>
+      <span class="pill">Main Regime: IB Extension</span>
+      <span class="pill">Use Case: Risk Intelligence</span>
+      <span class="pill">Not A Blind Signal</span>
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container">
+    <div class="eyebrow">Strategic Interpretation</div>
+    <div class="interpretation-grid">
+      <article class="note-card"><h3>What the study supports</h3><p class="small muted">Monitor the 15:00–16:00 window more closely, especially when the market has already extended 1.25x–2.00x the IB range.</p></article>
+      <article class="note-card"><h3>What it does not prove</h3><p class="small muted">Low breakout probability does not automatically imply a high-probability fade. P(not breakout) is not the same as P(mean reversion).</p></article>
+      <article class="note-card"><h3>Decision layer</h3><p class="small muted">Sizing should become more cautious in low-probability breakout states. Fade logic needs rejection evidence, not just a low continuation probability.</p></article>
+      <article class="note-card"><h3>Next study</h3><p class="small muted">P(close back inside IB | IB extension bucket + late high/low break).</p></article>
+    </div>
+  </div>
+</section>
+
 </main>
 
+<div class="code-modal" data-code-modal aria-hidden="true">
+  <div class="code-modal-panel" role="dialog" aria-modal="true" aria-label="Python code">
+    <div class="code-modal-header">
+      <div class="code-modal-title">Python Study Code</div>
+      <div class="code-modal-actions">
+        <span class="copy-status" data-copy-status></span>
+        <button type="button" data-copy-code>Copy</button>
+        <button type="button" data-close-code>Close</button>
+      </div>
+    </div>
+
+<textarea id="codeText" data-code-block readonly>from pathlib import Path
+
+script = Path("/mnt/data/compute_mutually_exclusive_close_studies.py")
+
+content = r'''"""
+MNQ Close Studies — mutually exclusive outcome buckets.
+
+Definitions:
+- Session/day high-low: 09:30–16:15 EST
+- IB: 09:30–10:30 EST
+- Mutually exclusive outcome buckets:
+  * Close2h-only: 14:00–15:00
+  * Close1h-only: 15:00–16:00
+  * Last15-only: 16:00–16:15
+
+Event timing uses first occurrence timestamp of day high/low.
+Rolling quintiles use prior 20 trading days only.
+"""
+
+import pandas as pd
+import numpy as np
+import math
+from datetime import time
+
+DATA_PATH = "MNQ LT DATA.csv"
+
+def mask_between(t_series, start_t, end_t):
+    return (t_series >= start_t) & (t_series < end_t)
+
+def time_in(series_dt, start_t, end_t):
+    tt = pd.to_datetime(series_dt).dt.time
+    return (tt >= start_t) & (tt < end_t)
+
+def wilson_ci(k, n, z=1.959963984540054):
+    if n == 0:
+        return (np.nan, np.nan)
+    p = k / n
+    denom = 1 + z*z/n
+    center = (p + z*z/(2*n)) / denom
+    half = z * math.sqrt((p*(1-p) + z*z/(4*n))/n) / denom
+    return center-half, center+half
+
+# Load data
+cols = pd.read_csv(DATA_PATH, nrows=0).columns.tolist()
+
+dt_candidates = [c for c in cols if any(k in c.lower() for k in ["date time","datetime","timestamp"])]
+if not dt_candidates:
+    dt_candidates = [c for c in cols if ("date" in c.lower() and "time" in c.lower())]
+
+dt_col = dt_candidates[0]
+
+high_col = "High" if "High" in cols else ("HIGH" if "HIGH" in cols else "high")
+low_col  = "Low" if "Low" in cols else ("LOW" if "LOW" in cols else "low")
+
+df = pd.read_csv(DATA_PATH, usecols=[dt_col, high_col, low_col], low_memory=False)
+
+df["dt"] = pd.to_datetime(df[dt_col], errors="coerce")
+df = df.dropna(subset=["dt"]).copy()
+
+df = df.rename(columns={
+    high_col:"High",
+    low_col:"Low"
+})
+
+df["date"] = df["dt"].dt.date
+
+tser = df["dt"].dt.time
+
+# Definitions
+IB_START = time(9,30)
+IB_END   = time(10,30)
+
+SESS_START = time(9,30)
+SESS_END   = time(16,15)
+
+WINDOWS = {
+    "close2h_only": ("14:00–15:00", time(14,0), time(15,0)),
+    "close1h_only": ("15:00–16:00", time(15,0), time(16,0)),
+    "last15_only":  ("16:00–16:15", time(16,0), time(16,15)),
+}
+
+df["_in_sess"] = mask_between(tser, SESS_START, SESS_END)
+
+sess = df[df["_in_sess"]].copy()
+
+# Day extremes
+day_agg = sess.groupby("date").agg(
+    day_high=("High","max"),
+    day_low=("Low","min")
+).reset_index()
+
+# First occurrence timestamps
+sess_hi = sess.merge(day_agg[["date","day_high"]], on="date", how="inner")
+
+hi_first = (
+    sess_hi.loc[sess_hi["High"] == sess_hi["day_high"]]
+    .groupby("date")["dt"]
+    .min()
+    .rename("day_high_first_dt")
+    .reset_index()
+)
+
+sess_lo = sess.merge(day_agg[["date","day_low"]], on="date", how="inner")
+
+lo_first = (
+    sess_lo.loc[sess_lo["Low"] == sess_lo["day_low"]]
+    .groupby("date")["dt"]
+    .min()
+    .rename("day_low_first_dt")
+    .reset_index()
+)
+
+occ = (
+    day_agg
+    .merge(hi_first, on="date", how="inner")
+    .merge(lo_first, on="date", how="inner")
+)
+
+# Mutually exclusive event windows
+rows = []
+
+N = len(occ)
+
+for key, (label, start_t, end_t) in WINDOWS.items():
+
+    occ[f"high_in_{key}"] = time_in(
+        occ["day_high_first_dt"],
+        start_t,
+        end_t
+    )
+
+    occ[f"low_in_{key}"] = time_in(
+        occ["day_low_first_dt"],
+        start_t,
+        end_t
+    )
+
+    occ[f"event_{key}"] = (
+        occ[f"high_in_{key}"] |
+        occ[f"low_in_{key}"]
+    )
+
+    k = int(occ[f"event_{key}"].sum())
+
+    p = k / N
+
+    ci_lo, ci_hi = wilson_ci(k, N)
+
+    rows.append({
+        "window": label,
+        "N_days": N,
+        "k_event_true": k,
+        "probability": p,
+        "ci95_low": ci_lo,
+        "ci95_high": ci_hi
+    })
+
+metrics = pd.DataFrame(rows)
+
+print(metrics)
+
+metrics.to_csv(
+    "study1_unconditional_mutually_exclusive_metrics.csv",
+    index=False
+)
+
+occ.to_csv(
+    "daily_occurrences_mutually_exclusive.csv",
+    index=False
+)
+
+print("\\nFiles exported:")
+print("- study1_unconditional_mutually_exclusive_metrics.csv")
+print("- daily_occurrences_mutually_exclusive.csv")
+'''
+
+script.write_text(content, encoding="utf-8")
+
+print(f"Saved script to: {script}")</textarea>
+  </div>
+</div>
+
 <footer class="container footer">
-  <div><a class="logo" href="index.html"><span class="logo-mark">JJR</span><span class="logo-word">Analytica</span></a><p class="small">Institutional research for intraday traders.</p></div>
-  <div><h4>Research</h4><p><a href="research.html">All Studies</a></p><p><a href="study-logic.html">Study Logic</a></p></div>
-  <div><h4>Methodology</h4><p><a href="methodology.html">Framework</a></p><p><a href="math-framework.html">Math Notes</a></p></div>
-  <div id="join"><h4>Join the Research List</h4><form class="email-box"><input placeholder="Email address" type="email"><button>→</button></form></div>
+  <div>
+    <a class="logo" href="../index.html">
+      <span class="logo-mark">JJR</span>
+      <span class="logo-word">Analytica</span>
+    </a>
+    <p class="small">Institutional research for intraday traders.</p>
+  </div>
+  <div>
+    <h4>Research</h4>
+    <p><a href="../research.html">All Studies</a></p>
+    <p><a href="../study-logic.html">Study Logic</a></p>
+  </div>
+  <div>
+    <h4>Methodology</h4>
+    <p><a href="../methodology.html">Framework</a></p>
+    <p><a href="../math-framework.html">Math Notes</a></p>
+  </div>
+  <div id="join">
+    <h4>Join the Research List</h4>
+    <form class="email-box">
+      <input placeholder="Email address" type="email">
+      <button>→</button>
+    </form>
+  </div>
 </footer>
+
 <div class="disclaimer">Educational research only. Not financial advice.</div>
+
+<script>
+(function(){
+  const modal = document.querySelector('[data-code-modal]');
+  const openBtn = document.querySelector('[data-open-code]');
+  const closeBtn = document.querySelector('[data-close-code]');
+  const copyBtn = document.querySelector('[data-copy-code]');
+  const codeBlock = document.querySelector('[data-code-block]');
+  const status = document.querySelector('[data-copy-status]');
+
+  if(!modal || !openBtn) return;
+
+  function openModal(){
+    modal.classList.add('open');
+    modal.setAttribute('aria-hidden','false');
+  }
+
+  function closeModal(){
+    modal.classList.remove('open');
+    modal.setAttribute('aria-hidden','true');
+    if(status) status.textContent='';
+  }
+
+  openBtn.addEventListener('click', openModal);
+
+  if(closeBtn){
+    closeBtn.addEventListener('click', closeModal);
+  }
+
+  modal.addEventListener('click', function(e){
+    if(e.target === modal){
+      closeModal();
+    }
+  });
+
+  document.addEventListener('keydown', function(e){
+    if(e.key === 'Escape'){
+      closeModal();
+    }
+  });
+
+  if(copyBtn && codeBlock){
+    copyBtn.addEventListener('click', async function(){
+      try{
+        await navigator.clipboard.writeText(codeBlock.value || codeBlock.textContent);
+        if(status) status.textContent='Copied';
+      }catch(err){
+        if(status) status.textContent='Select text';
+      }
+    });
+  }
+})();
+</script>
+
 </body>
 </html>
