@@ -45,4 +45,213 @@ h1{font-family:var(--mono);font-weight:400;letter-spacing:.22em;text-transform:u
 .logic-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:24px}.logic-card{border:1px solid var(--line);background:rgba(255,255,255,.012);padding:24px}.logic-card h3{font-family:var(--mono);font-weight:400;letter-spacing:.14em;text-transform:uppercase;margin-top:0}.logic-card pre,.panel pre{margin:14px 0 0;background:#0a0b0b;border:1px solid var(--line-soft);padding:16px;white-space:pre-wrap;font-family:var(--mono);font-size:12px;line-height:1.8;color:#d4d0c8}.formula{font-family:var(--mono);font-size:20px;line-height:1.6;color:var(--accent);margin:10px 0 18px}.formula.large{font-size:28px}.metrics-grid{grid-template-columns:repeat(3,1fr)}.rules-grid{grid-template-columns:repeat(3,1fr)}
 @media(max-width:900px){.timeline-grid,.timeline-grid.seven,.timeline-grid.four,.logic-grid,.metrics-grid,.rules-grid{grid-template-columns:1fr}}
 
-</style></head><body class="noise"><header class="site-header"><a class="logo" href="../index.html"><span class="logo-mark">JJR</span><span class="logo-word">Analytica</span></a><nav class="nav"><a href="../research.html">Research</a><a href="../methodology.html">Methodology</a><a href="../about.html">About</a><a class="nav-cta" href="../index.html#join">Join Research List →</a><span class="menu-dots">⋯</span></nav></header><main><section class="container study-hero"><div class="breadcrumb">Research / Studies / Late-Day Auction Completion</div><div class="kicker">Individual Study</div><h1 class="study-title">Late-Day Auction Completion</h1><p class="lead">Template page for evaluating whether requiring a pullback after 10:08 improves entry quality and reduces adverse excursion.</p></section><section class="section"><div class="container result-layout"><div class="panel"><h3>Result Snapshot</h3><div class="big-prob">32.72%</div><p class="muted">Placeholder target-reach probability.</p></div><div class="panel"><h3>Interpretation</h3><p class="body-copy">This is where you can compare immediate 10:08 entry against pullback-qualified entry using MAE, MFE, win rate, average R, and missed-trade rate.</p></div></div></section><section class="section"><div class="container"><div class="eyebrow">Study Definition</div><div class="panel"><h3>Mutually Exclusive Close Windows</h3><p class="body-copy">This study classifies when the session high or low first occurs inside late-day windows. The 15:00–16:00 bucket is treated as its own auction-completion regime and should not be mixed with earlier or later event windows.</p><div class="research-table"><table><thead><tr><th>Window</th><th>Question</th><th>Sample</th><th>Result</th></tr></thead><tbody><tr><td>Late-Day Auction Completion</td><td>P(day high/low forms in 15:00–16:00)</td><td>1,299 days</td><td>32.72%</td></tr></tbody></table></div></div></div></section></main><footer class="container footer"><div><a class="logo" href="../index.html"><span class="logo-mark">JJR</span><span class="logo-word">Analytica</span></a></div><div><h4>Research</h4><p><a href="../research.html">All Studies</a></p></div><div><h4>Company</h4><p><a href="../methodology.html">Methodology</a></p></div><div><h4>Research List</h4><form class="email-box"><input placeholder="Email address"><button>→</button></form></div></footer><div class="disclaimer">Educational research only. Placeholder statistics. Not financial advice.</div></body></html>
+
+.code-launch-row{display:flex;align-items:center;gap:16px;margin-top:28px;flex-wrap:wrap}.code-note{font-family:var(--mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--faint)}.code-modal{position:fixed;inset:0;display:none;align-items:center;justify-content:center;padding:22px;background:rgba(0,0,0,.72);backdrop-filter:blur(10px);z-index:99}.code-modal.open{display:flex}.code-modal-panel{width:min(920px,calc(100vw - 36px));max-height:78vh;border:1px solid var(--line);background:#080909;box-shadow:var(--shadow);display:flex;flex-direction:column}.code-modal-header{display:flex;align-items:center;justify-content:space-between;gap:20px;padding:16px 18px;border-bottom:1px solid var(--line-soft)}.code-modal-title{font-family:var(--mono);font-size:12px;text-transform:uppercase;letter-spacing:.16em;color:var(--text)}.code-modal-actions{display:flex;gap:10px;align-items:center}.code-modal-actions button{border:1px solid var(--line);background:#111212;color:var(--text);font-family:var(--mono);font-size:11px;text-transform:uppercase;letter-spacing:.12em;padding:10px 12px;cursor:pointer}.code-modal-actions button:hover{background:#191a1a}.code-modal pre{margin:0;padding:18px;overflow:auto;white-space:pre;font-family:var(--mono);font-size:11px;line-height:1.65;color:#d4d0c8;background:#060707}.copy-status{font-family:var(--mono);font-size:11px;color:var(--good);min-width:48px}
+</style></head><body class="noise"><header class="site-header"><a class="logo" href="../index.html"><span class="logo-mark">JJR</span><span class="logo-word">Analytica</span></a><nav class="nav"><a href="../research.html">Research</a><a href="../methodology.html">Methodology</a><a href="../about.html">About</a><a class="nav-cta" href="../index.html#join">Join Research List →</a><span class="menu-dots">⋯</span></nav></header><main><section class="container study-hero"><div class="breadcrumb">Research / Studies / Late-Day Auction Completion</div><div class="kicker">Individual Study</div><h1 class="study-title">Late-Day Auction Completion</h1><p class="lead">Template page for evaluating whether requiring a pullback after 10:08 improves entry quality and reduces adverse excursion.</p><div class="code-launch-row"><button class="btn ghost" type="button" data-open-code>View Python Code →</button><span class="code-note">Open a compact copy-ready script box for independent review.</span></div></section><section class="section"><div class="container result-layout"><div class="panel"><h3>Result Snapshot</h3><div class="big-prob">32.72%</div><p class="muted">Placeholder target-reach probability.</p></div><div class="panel"><h3>Interpretation</h3><p class="body-copy">This is where you can compare immediate 10:08 entry against pullback-qualified entry using MAE, MFE, win rate, average R, and missed-trade rate.</p></div></div></section><section class="section"><div class="container"><div class="eyebrow">Study Definition</div><div class="panel"><h3>Mutually Exclusive Close Windows</h3><p class="body-copy">This study classifies when the session high or low first occurs inside late-day windows. The 15:00–16:00 bucket is treated as its own auction-completion regime and should not be mixed with earlier or later event windows.</p><div class="research-table"><table><thead><tr><th>Window</th><th>Question</th><th>Sample</th><th>Result</th></tr></thead><tbody><tr><td>Late-Day Auction Completion</td><td>P(day high/low forms in 15:00–16:00)</td><td>1,299 days</td><td>32.72%</td></tr></tbody></table></div></div></div></section><div class="code-modal" data-code-modal aria-hidden="true"><div class="code-modal-panel" role="dialog" aria-modal="true" aria-label="Python code"><div class="code-modal-header"><div class="code-modal-title">Python Study Code</div><div class="code-modal-actions"><span class="copy-status" data-copy-status></span><button type="button" data-copy-code>Copy</button><button type="button" data-close-code>Close</button></div></div><pre><code data-code-block>from pathlib import Path
+
+script = Path(&quot;/mnt/data/compute_mutually_exclusive_close_studies.py&quot;)
+
+content = r&#x27;&#x27;&#x27;&quot;&quot;&quot;
+MNQ Close Studies — mutually exclusive outcome buckets.
+
+Definitions:
+- Session/day high-low: 09:30–16:15 EST
+- IB: 09:30–10:30 EST
+- Mutually exclusive outcome buckets:
+  * Close2h-only: 14:00–15:00
+  * Close1h-only: 15:00–16:00
+  * Last15-only: 16:00–16:15
+
+Event timing uses first occurrence timestamp of day high/low.
+Rolling quintiles use prior 20 trading days only.
+&quot;&quot;&quot;
+
+import pandas as pd
+import numpy as np
+import math
+from datetime import time
+
+DATA_PATH = &quot;MNQ LT DATA.csv&quot;
+
+def mask_between(t_series, start_t, end_t):
+    return (t_series &gt;= start_t) &amp; (t_series &lt; end_t)
+
+def time_in(series_dt, start_t, end_t):
+    tt = pd.to_datetime(series_dt).dt.time
+    return (tt &gt;= start_t) &amp; (tt &lt; end_t)
+
+def wilson_ci(k, n, z=1.959963984540054):
+    if n == 0:
+        return (np.nan, np.nan)
+    p = k / n
+    denom = 1 + z*z/n
+    center = (p + z*z/(2*n)) / denom
+    half = z * math.sqrt((p*(1-p) + z*z/(4*n))/n) / denom
+    return center-half, center+half
+
+# Load data
+cols = pd.read_csv(DATA_PATH, nrows=0).columns.tolist()
+
+dt_candidates = [c for c in cols if any(k in c.lower() for k in [&quot;date time&quot;,&quot;datetime&quot;,&quot;timestamp&quot;])]
+if not dt_candidates:
+    dt_candidates = [c for c in cols if (&quot;date&quot; in c.lower() and &quot;time&quot; in c.lower())]
+
+dt_col = dt_candidates[0]
+
+high_col = &quot;High&quot; if &quot;High&quot; in cols else (&quot;HIGH&quot; if &quot;HIGH&quot; in cols else &quot;high&quot;)
+low_col  = &quot;Low&quot; if &quot;Low&quot; in cols else (&quot;LOW&quot; if &quot;LOW&quot; in cols else &quot;low&quot;)
+
+df = pd.read_csv(DATA_PATH, usecols=[dt_col, high_col, low_col], low_memory=False)
+
+df[&quot;dt&quot;] = pd.to_datetime(df[dt_col], errors=&quot;coerce&quot;)
+df = df.dropna(subset=[&quot;dt&quot;]).copy()
+
+df = df.rename(columns={
+    high_col:&quot;High&quot;,
+    low_col:&quot;Low&quot;
+})
+
+df[&quot;date&quot;] = df[&quot;dt&quot;].dt.date
+
+tser = df[&quot;dt&quot;].dt.time
+
+# Definitions
+IB_START = time(9,30)
+IB_END   = time(10,30)
+
+SESS_START = time(9,30)
+SESS_END   = time(16,15)
+
+WINDOWS = {
+    &quot;close2h_only&quot;: (&quot;14:00–15:00&quot;, time(14,0), time(15,0)),
+    &quot;close1h_only&quot;: (&quot;15:00–16:00&quot;, time(15,0), time(16,0)),
+    &quot;last15_only&quot;:  (&quot;16:00–16:15&quot;, time(16,0), time(16,15)),
+}
+
+df[&quot;_in_sess&quot;] = mask_between(tser, SESS_START, SESS_END)
+
+sess = df[df[&quot;_in_sess&quot;]].copy()
+
+# Day extremes
+day_agg = sess.groupby(&quot;date&quot;).agg(
+    day_high=(&quot;High&quot;,&quot;max&quot;),
+    day_low=(&quot;Low&quot;,&quot;min&quot;)
+).reset_index()
+
+# First occurrence timestamps
+sess_hi = sess.merge(day_agg[[&quot;date&quot;,&quot;day_high&quot;]], on=&quot;date&quot;, how=&quot;inner&quot;)
+
+hi_first = (
+    sess_hi.loc[sess_hi[&quot;High&quot;] == sess_hi[&quot;day_high&quot;]]
+    .groupby(&quot;date&quot;)[&quot;dt&quot;]
+    .min()
+    .rename(&quot;day_high_first_dt&quot;)
+    .reset_index()
+)
+
+sess_lo = sess.merge(day_agg[[&quot;date&quot;,&quot;day_low&quot;]], on=&quot;date&quot;, how=&quot;inner&quot;)
+
+lo_first = (
+    sess_lo.loc[sess_lo[&quot;Low&quot;] == sess_lo[&quot;day_low&quot;]]
+    .groupby(&quot;date&quot;)[&quot;dt&quot;]
+    .min()
+    .rename(&quot;day_low_first_dt&quot;)
+    .reset_index()
+)
+
+occ = (
+    day_agg
+    .merge(hi_first, on=&quot;date&quot;, how=&quot;inner&quot;)
+    .merge(lo_first, on=&quot;date&quot;, how=&quot;inner&quot;)
+)
+
+# Mutually exclusive event windows
+rows = []
+
+N = len(occ)
+
+for key, (label, start_t, end_t) in WINDOWS.items():
+
+    occ[f&quot;high_in_{key}&quot;] = time_in(
+        occ[&quot;day_high_first_dt&quot;],
+        start_t,
+        end_t
+    )
+
+    occ[f&quot;low_in_{key}&quot;] = time_in(
+        occ[&quot;day_low_first_dt&quot;],
+        start_t,
+        end_t
+    )
+
+    occ[f&quot;event_{key}&quot;] = (
+        occ[f&quot;high_in_{key}&quot;] |
+        occ[f&quot;low_in_{key}&quot;]
+    )
+
+    k = int(occ[f&quot;event_{key}&quot;].sum())
+
+    p = k / N
+
+    ci_lo, ci_hi = wilson_ci(k, N)
+
+    rows.append({
+        &quot;window&quot;: label,
+        &quot;N_days&quot;: N,
+        &quot;k_event_true&quot;: k,
+        &quot;probability&quot;: p,
+        &quot;ci95_low&quot;: ci_lo,
+        &quot;ci95_high&quot;: ci_hi
+    })
+
+metrics = pd.DataFrame(rows)
+
+print(metrics)
+
+metrics.to_csv(
+    &quot;study1_unconditional_mutually_exclusive_metrics.csv&quot;,
+    index=False
+)
+
+occ.to_csv(
+    &quot;daily_occurrences_mutually_exclusive.csv&quot;,
+    index=False
+)
+
+print(&quot;\\nFiles exported:&quot;)
+print(&quot;- study1_unconditional_mutually_exclusive_metrics.csv&quot;)
+print(&quot;- daily_occurrences_mutually_exclusive.csv&quot;)
+&#x27;&#x27;&#x27;
+
+script.write_text(content, encoding=&quot;utf-8&quot;)
+
+print(f&quot;Saved script to: {script}&quot;)
+</code></pre></div></div></main><footer class="container footer"><div><a class="logo" href="../index.html"><span class="logo-mark">JJR</span><span class="logo-word">Analytica</span></a></div><div><h4>Research</h4><p><a href="../research.html">All Studies</a></p></div><div><h4>Company</h4><p><a href="../methodology.html">Methodology</a></p></div><div><h4>Research List</h4><form class="email-box"><input placeholder="Email address"><button>→</button></form></div></footer><div class="disclaimer">Educational research only. Placeholder statistics. Not financial advice.</div>
+<script>
+(function(){
+  const modal = document.querySelector('[data-code-modal]');
+  const openBtn = document.querySelector('[data-open-code]');
+  const closeBtn = document.querySelector('[data-close-code]');
+  const copyBtn = document.querySelector('[data-copy-code]');
+  const codeBlock = document.querySelector('[data-code-block]');
+  const status = document.querySelector('[data-copy-status]');
+  if(!modal || !openBtn) return;
+  function openModal(){ modal.classList.add('open'); modal.setAttribute('aria-hidden','false'); }
+  function closeModal(){ modal.classList.remove('open'); modal.setAttribute('aria-hidden','true'); if(status) status.textContent=''; }
+  openBtn.addEventListener('click', openModal);
+  if(closeBtn) closeBtn.addEventListener('click', closeModal);
+  modal.addEventListener('click', e => { if(e.target === modal) closeModal(); });
+  document.addEventListener('keydown', e => { if(e.key === 'Escape') closeModal(); });
+  if(copyBtn && codeBlock){
+    copyBtn.addEventListener('click', async () => {
+      try{
+        await navigator.clipboard.writeText(codeBlock.textContent);
+        if(status) status.textContent = 'Copied';
+      }catch(err){
+        if(status) status.textContent = 'Select text';
+      }
+    });
+  }
+})();
+</script>
+</body></html>
