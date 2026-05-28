@@ -1,0 +1,345 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>LF/HF No-Quartile Framework — JJR Analytica</title><meta name="description" content="09:30–10:10 LF/HF no-quartile probability framework for MNQ intraday market structure."><style>
+:root{--bg:#050606;--panel:#0a0b0b;--panel-2:#0e1010;--line:#262828;--line-soft:#171919;--text:#d7d4cc;--muted:#8b8982;--faint:#5e5c56;--accent:#b7b0a4;--good:#9bbf8e;--bad:#b98b86;--warn:#b4a56b;--shadow:0 24px 80px rgba(0,0,0,.45);--mono:"SFMono-Regular","Cascadia Code","Roboto Mono","Courier New",monospace;--sans:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:radial-gradient(circle at 70% 0%,rgba(255,255,255,.045),transparent 32%),linear-gradient(180deg,#050606 0%,#080909 42%,#050606 100%);color:var(--text);font-family:var(--sans);letter-spacing:.01em}a{color:inherit;text-decoration:none}button,input,textarea{font:inherit}.noise:before{content:"";position:fixed;inset:0;pointer-events:none;opacity:.12;mix-blend-mode:overlay;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 320 320' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.45'/%3E%3C/svg%3E")}.site-header{height:72px;border-bottom:1px solid var(--line-soft);display:flex;align-items:center;justify-content:space-between;padding:0 clamp(22px,5vw,84px);position:sticky;top:0;background:rgba(5,6,6,.82);backdrop-filter:blur(16px);z-index:10}.logo{display:flex;gap:18px;align-items:baseline}.logo-mark{font-family:var(--mono);font-size:26px;letter-spacing:.12em}.logo-word{font-family:var(--mono);font-size:12px;letter-spacing:.42em;color:var(--muted);text-transform:uppercase}.nav{display:flex;align-items:center;gap:40px;font-family:var(--mono);font-size:12px;text-transform:uppercase;letter-spacing:.18em;color:var(--muted)}.nav a:hover{color:var(--text)}.nav-cta{border:1px solid var(--line);padding:12px 16px;background:#101111;color:var(--text)}.menu-dots{letter-spacing:.2em;color:var(--faint)}main{overflow:hidden}.container{width:min(1120px,calc(100% - 44px));margin:0 auto}.hero{min-height:560px;display:grid;grid-template-columns:1fr 1.05fr;gap:60px;align-items:center;border-bottom:1px solid var(--line-soft);position:relative}.kicker{font-family:var(--mono);font-size:12px;letter-spacing:.22em;text-transform:uppercase;color:var(--muted);border:1px solid var(--line);display:inline-flex;padding:8px 10px;margin-bottom:36px;background:rgba(255,255,255,.015)}h1{font-family:var(--mono);font-weight:400;letter-spacing:.22em;text-transform:uppercase;font-size:clamp(34px,5vw,62px);line-height:1.18;margin:0 0 32px}.lead{max-width:720px;color:#aaa79f;line-height:1.85;font-size:15px}.hero-actions{display:flex;gap:18px;margin-top:36px;align-items:center}.btn{display:inline-flex;align-items:center;gap:12px;border:1px solid var(--line);background:#111212;color:var(--text);padding:15px 22px;font-family:var(--mono);font-size:12px;text-transform:uppercase;letter-spacing:.16em;cursor:pointer}.btn:hover{background:#191a1a;border-color:#3a3b3b}.btn.primary{background:#d8d3ca;color:#080909;border-color:#d8d3ca}.btn.ghost{background:transparent;color:var(--muted)}.hero-visual{height:380px;border-left:1px solid var(--line-soft);position:relative;display:flex;align-items:center;justify-content:center;overflow:hidden;opacity:.92}.hero-visual:before{content:"";position:absolute;inset:0;z-index:2;pointer-events:none;background:radial-gradient(ellipse at 52% 52%,transparent 0%,rgba(5,6,6,.10) 36%,rgba(5,6,6,.72) 100%),linear-gradient(90deg,rgba(5,6,6,.35),transparent 30%,rgba(5,6,6,.18));}.hero-visual:after{content:"";position:absolute;inset:0;z-index:3;pointer-events:none;background:repeating-linear-gradient(0deg,rgba(255,255,255,.025) 0 1px,transparent 1px 6px);mix-blend-mode:overlay;opacity:.28}.hero-visual img{width:100%;height:100%;object-fit:cover;object-position:center;filter:grayscale(1) contrast(1.08) brightness(.74);mix-blend-mode:screen;transform:scale(1.04)}.trait-strip{display:grid;grid-template-columns:repeat(4,1fr);gap:0;border-bottom:1px solid var(--line-soft)}.trait{padding:22px 0;font-family:var(--mono);font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted)}.trait:before{content:"□";margin-right:12px;color:var(--faint)}.section{padding:70px 0;border-bottom:1px solid var(--line-soft)}.split{display:grid;grid-template-columns:1.2fr .9fr;gap:80px;align-items:start}.eyebrow{font-family:var(--mono);font-size:11px;letter-spacing:.22em;text-transform:uppercase;color:var(--faint);margin-bottom:18px}.section h2{font-family:var(--mono);font-size:29px;line-height:1.45;letter-spacing:.18em;text-transform:uppercase;font-weight:400;margin:0}.body-copy{color:#a5a29a;line-height:1.8;font-size:15px}.research-table{margin-top:42px;border:1px solid var(--line);background:rgba(255,255,255,.015);box-shadow:var(--shadow);overflow:auto}table{width:100%;border-collapse:collapse}th{font-family:var(--mono);font-size:11px;text-transform:uppercase;letter-spacing:.16em;color:var(--muted);font-weight:400;text-align:left;padding:18px 24px;border-bottom:1px solid var(--line)}td{padding:21px 24px;border-bottom:1px solid var(--line-soft);color:#c9c5bc;font-family:var(--mono);font-size:14px}tr:last-child td{border-bottom:0}.spark{height:20px;width:88px;display:inline-block;background:linear-gradient(90deg,#3f403e 10%,#77756d 10% 20%,#51524f 20% 32%,#a7a399 32% 40%,#5f605b 40% 55%,#77756d 55% 66%,#42433f 66% 100%);clip-path:polygon(0 70%,9% 45%,18% 60%,27% 35%,36% 25%,45% 50%,54% 28%,63% 42%,72% 22%,81% 58%,90% 42%,100% 52%,100% 100%,0 100%);opacity:.75}.table-link{display:inline-block;padding:18px 24px;font-family:var(--mono);font-size:12px;text-transform:uppercase;letter-spacing:.18em;color:var(--accent)}.method-grid{display:grid;grid-template-columns:repeat(6,1fr);border:1px solid var(--line);margin-top:36px}.method{padding:28px 22px;border-right:1px solid var(--line-soft);min-height:150px}.method:last-child{border-right:0}.method .icon{font-size:23px;color:var(--accent);margin-bottom:18px}.method h3{font-family:var(--mono);font-size:12px;letter-spacing:.18em;text-transform:uppercase;font-weight:400}.method p{font-size:13px;line-height:1.7;color:var(--muted)}.card-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:24px}.card{border:1px solid var(--line);background:linear-gradient(180deg,rgba(255,255,255,.025),rgba(255,255,255,.008));padding:26px;min-height:210px}.card h3{font-family:var(--mono);font-weight:400;letter-spacing:.12em;text-transform:uppercase;margin-top:0}.metric{font-family:var(--mono);font-size:38px;color:var(--accent);margin:22px 0 6px}.muted{color:var(--muted)}.small{font-size:13px;line-height:1.7}.study-hero{padding:62px 0 28px;border-bottom:1px solid var(--line-soft)}.breadcrumb{font-family:var(--mono);font-size:11px;text-transform:uppercase;letter-spacing:.14em;color:var(--faint);margin-bottom:30px}.study-title{font-family:var(--mono);font-size:42px;letter-spacing:.16em;text-transform:uppercase;font-weight:400;margin:0 0 12px}.meta-bar{display:grid;grid-template-columns:repeat(5,1fr);border:1px solid var(--line);margin-top:34px}.meta{padding:20px;border-right:1px solid var(--line-soft);text-align:center}.meta:last-child{border-right:0}.meta-label{font-family:var(--mono);font-size:10px;text-transform:uppercase;letter-spacing:.16em;color:var(--faint)}.meta-value{margin-top:10px;color:var(--text);font-family:var(--mono)}.panel{border:1px solid var(--line);background:rgba(255,255,255,.014);padding:28px}.panel h3{font-family:var(--mono);font-weight:400;text-transform:uppercase;letter-spacing:.12em;margin-top:0}.result-layout{display:grid;grid-template-columns:.9fr 1.8fr;gap:24px}.big-prob{font-family:var(--mono);font-size:72px;color:var(--good);line-height:1}.footer{padding:48px 0;display:grid;grid-template-columns:1.3fr .7fr .7fr 1.2fr;gap:50px;color:var(--muted)}.footer h4{font-family:var(--mono);font-size:11px;text-transform:uppercase;letter-spacing:.18em;color:var(--text);font-weight:400}.email-box{display:flex;border:1px solid var(--line);margin-top:18px}.email-box input{flex:1;background:#0a0b0b;color:var(--text);border:0;padding:14px}.email-box button{width:48px;background:#2a2a28;color:var(--text);border:0}.disclaimer{border-top:1px solid var(--line-soft);padding:18px 0;color:var(--faint);font-family:var(--mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase;text-align:center}.code-launch-row{display:flex;align-items:center;gap:16px;margin-top:28px;flex-wrap:wrap}.code-note{font-family:var(--mono);font-size:13px;color:var(--muted)}.code-modal{position:fixed;inset:0;display:none;align-items:center;justify-content:center;padding:22px;background:rgba(0,0,0,.72);backdrop-filter:blur(10px);z-index:99}.code-modal.open{display:flex}.code-modal-panel{width:min(920px,calc(100vw - 36px));max-height:78vh;border:1px solid var(--line);background:#080909;box-shadow:var(--shadow);display:flex;flex-direction:column}.code-modal-header{display:flex;align-items:center;justify-content:space-between;gap:20px;padding:16px 18px;border-bottom:1px solid var(--line-soft)}.code-modal-title{font-family:var(--mono);font-size:12px;text-transform:uppercase;letter-spacing:.16em;color:var(--text)}.code-modal-actions{display:flex;gap:10px;align-items:center}.code-modal-actions button{border:1px solid var(--line);background:#111212;color:var(--text);font-family:var(--mono);font-size:11px;text-transform:uppercase;letter-spacing:.12em;padding:10px 12px;cursor:pointer}.copy-status{font-family:var(--mono);font-size:11px;color:var(--good);min-width:48px}#codeText{width:100%;height:58vh;border:0;outline:0;resize:none;padding:18px;overflow:auto;white-space:pre;font-family:var(--mono);font-size:11px;line-height:1.65;color:#d4d0c8;background:#060707}.pill-row{display:flex;flex-wrap:wrap;gap:10px;margin-top:22px}.pill{border:1px solid var(--line);color:var(--muted);font-family:var(--mono);font-size:11px;text-transform:uppercase;letter-spacing:.12em;padding:9px 11px;background:rgba(255,255,255,.012)}.interpretation-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:24px}.note-card{border:1px solid var(--line);background:rgba(255,255,255,.012);padding:24px}.note-card h3{font-family:var(--mono);font-size:13px;letter-spacing:.16em;text-transform:uppercase;font-weight:400;margin-top:0}@media(max-width:900px){.hero,.split,.result-layout,.trait-strip,.method-grid,.card-grid,.meta-bar,.footer,.interpretation-grid{grid-template-columns:1fr}.nav{display:none}.method,.meta{border-right:0;border-bottom:1px solid var(--line-soft)}h1{letter-spacing:.13em}.hero{padding:70px 0}.hero-visual{height:260px;border-left:0}.research-table{overflow:auto}td,th{min-width:150px}}
+</style></head><body class="noise"><header class="site-header"><a class="logo" href="../index.html"><span class="logo-mark">JJR</span><span class="logo-word">Analytica</span></a><nav class="nav"><a href="../research.html">Research</a><a href="../methodology.html">Methodology</a><a href="../about.html">About</a><a class="nav-cta" href="../index.html#join">Join Research List →</a><span class="menu-dots">⋯</span></nav></header><main><section class="container study-hero"><div class="breadcrumb">Research / Studies / LF-HF No-Quartile</div><div class="kicker">Intraday Path-Dependency Framework</div><h1 class="study-title">09:30–10:10 LF/HF No-Quartile Probability Framework</h1><p class="lead">A pure conditional-probability classification model evaluating whether early-session high/low sequencing contains information about later intraday expansion. This is not an execution system and does not define entries, exits, stops, targets, or position sizing.</p><div class="code-launch-row"><button class="btn ghost" type="button" data-open-code>View Python Code →</button><span class="code-note">Opens the LF/HF no-quartile Python script, not the IB or late-day script.</span></div><div class="meta-bar"><div class="meta"><div class="meta-label">Instrument</div><div class="meta-value">MNQ</div></div><div class="meta"><div class="meta-label">Dataset</div><div class="meta-value">MNQ LT 2</div></div><div class="meta"><div class="meta-label">Formation</div><div class="meta-value">09:30–10:10</div></div><div class="meta"><div class="meta-label">Framework</div><div class="meta-value">No Quartile</div></div><div class="meta"><div class="meta-label">Type</div><div class="meta-value">Probability Model</div></div></div></section><section class="section"><div class="container result-layout"><div class="panel"><h3>Result Snapshot</h3><div class="big-prob">83.39%</div><p class="muted">P(post-10:10 formation high break | LF), sample N = 578.</p></div><div class="panel"><h3>Executive Finding</h3><p class="body-copy">The 09:30–10:10 LF/HF framework measures whether the order of early-session high and low formation changes the later intraday probability distribution. LF sessions showed elevated upside expansion probabilities, while HF sessions showed elevated downside expansion probabilities. The strongest asymmetry appeared in post-formation directional extension rather than terminal close location.</p></div></div></section><section class="section"><div class="container"><div class="eyebrow">Core Definitions</div><div class="research-table"><table><thead><tr><th>State</th><th>Definition</th><th>Interpretation</th></tr></thead><tbody><tr><td>LF</td><td>First occurrence of the 09:30–10:10 low occurs before the first occurrence of the 09:30–10:10 high.</td><td>Low forms first; upside expansion state.</td></tr><tr><td>HF</td><td>First occurrence of the 09:30–10:10 high occurs before the first occurrence of the 09:30–10:10 low.</td><td>High forms first; downside expansion state.</td></tr><tr><td>SAME_BAR</td><td>Both first extremes occur on the same row/bar.</td><td>Ambiguous sequencing; separated from LF/HF.</td></tr></tbody></table></div></div></section><section class="section"><div class="container"><div class="eyebrow">Empirical Statistical Results</div><h2>Conditional probability outputs.</h2><div class="research-table"><table><thead><tr><th>Condition</th><th>Outcome</th><th>Sample Size</th><th>Probability</th></tr></thead><tbody><tr><td>LF</td><td>Post-10:10 formation high break</td><td>578</td><td><strong>83.39%</strong></td></tr><tr><td>LF</td><td>Post-10:30 IB high break</td><td>578</td><td><strong>74.91%</strong></td></tr><tr><td>LF</td><td>Close above IB midpoint</td><td>578</td><td><strong>65.22%</strong></td></tr><tr><td>HF</td><td>Post-10:10 formation low break</td><td>577</td><td><strong>79.38%</strong></td></tr><tr><td>HF</td><td>Post-10:30 IB low break</td><td>577</td><td><strong>69.15%</strong></td></tr><tr><td>HF</td><td>Close below IB midpoint</td><td>577</td><td><strong>54.94%</strong></td></tr></tbody></table></div></div></section><section class="section"><div class="container"><div class="split"><div><div class="eyebrow">Path Dependency</div><h2>Same range, different sequence, different distribution.</h2></div><p class="body-copy">Two sessions may print identical highs, lows, and ranges while forming those extremes in different orders. This framework isolates whether that sequencing itself contains conditional information. The model intentionally excludes quartile filters, prior-day location filters, VWAP filters, overnight inventory filters, volatility regime filters, and macro-event filters to preserve a cleaner base-rate framework.</p></div><div class="pill-row"><span class="pill">No Entries</span><span class="pill">No Stops</span><span class="pill">No Targets</span><span class="pill">No PnL Logic</span><span class="pill">Probability Classification Only</span></div></div></section><section class="section"><div class="container"><div class="eyebrow">Strategic Interpretation</div><div class="interpretation-grid"><article class="note-card"><h3>What the study supports</h3><p class="small muted">LF/HF sequencing may materially influence later directional expansion probabilities. It is most useful as an expansion-regime classifier.</p></article><article class="note-card"><h3>What it does not prove</h3><p class="small muted">The framework does not establish a standalone trading edge, optimal execution, or future persistence. Rolling and out-of-sample validation are still required.</p></article><article class="note-card"><h3>Use Case</h3><p class="small muted">Use as an intraday regime label that informs risk expectations after the 09:30–10:10 formation window.</p></article><article class="note-card"><h3>Next Research Layer</h3><p class="small muted">Test conditional behavior by volatility regime, prior-day location, IB range size, and rolling stability without contaminating the no-quartile base model.</p></article></div></div></section></main><div class="code-modal" data-code-modal aria-hidden="true"><div class="code-modal-panel" role="dialog" aria-modal="true" aria-label="Python code"><div class="code-modal-header"><div class="code-modal-title">Python Study Code</div><div class="code-modal-actions"><span class="copy-status" data-copy-status></span><button type="button" data-copy-code>Copy</button><button type="button" data-close-code>Close</button></div></div><textarea id="codeText" data-code-block readonly>#!/usr/bin/env python3
+&quot;&quot;&quot;
+JJR Analytica - 09:30-10:10 LF/HF No-Quartile Probability Study
+
+Purpose
+-------
+Pure probability model only. No entries, stops, targets, or PnL logic.
+
+Definitions
+-----------
+Formation window: 09:30 through 10:10 inclusive by default.
+LF = first occurrence of formation-window low occurs before first occurrence of formation-window high.
+HF = first occurrence of formation-window high occurs before first occurrence of formation-window low.
+SAME_BAR = both first extremes occur on the same row/bar.
+
+Outcomes measured
+-----------------
+1. Post-formation break of 09:30-10:10 high/low after the formation window.
+2. 09:30-10:30 IB high/low break after the IB window.
+3. Close location relative to 09:30-10:10 midpoint and IB midpoint.
+4. Net close direction from 10:10 close.
+5. Conditional probability summaries with Wilson confidence intervals.
+
+No quartile filters are used.
+&quot;&quot;&quot;
+
+from __future__ import annotations
+
+import argparse
+import json
+import math
+from pathlib import Path
+from datetime import time
+
+import numpy as np
+import pandas as pd
+
+
+def wilson_ci(k: int, n: int, z: float = 1.96) -&gt; tuple[float, float]:
+    if n &lt;= 0:
+        return (np.nan, np.nan)
+    p = k / n
+    denom = 1 + z*z/n
+    center = (p + z*z/(2*n)) / denom
+    half = z * math.sqrt((p*(1-p) + z*z/(4*n)) / n) / denom
+    return center - half, center + half
+
+
+def pct(x: float) -&gt; float:
+    return float(x * 100) if pd.notna(x) else np.nan
+
+
+def load_data(path: str | Path) -&gt; tuple[pd.DataFrame, dict]:
+    path = Path(path)
+    usecols = [&quot;Date Time&quot;, &quot;Open&quot;, &quot;High&quot;, &quot;Low&quot;, &quot;Last&quot;]
+    df = pd.read_csv(path, usecols=usecols, low_memory=False)
+    for c in [&quot;Open&quot;, &quot;High&quot;, &quot;Low&quot;, &quot;Last&quot;]:
+        df[c] = pd.to_numeric(df[c], errors=&quot;coerce&quot;)
+    df[&quot;timestamp&quot;] = pd.to_datetime(df[&quot;Date Time&quot;], errors=&quot;coerce&quot;)
+    before = len(df)
+    df = df.dropna(subset=[&quot;timestamp&quot;, &quot;Open&quot;, &quot;High&quot;, &quot;Low&quot;, &quot;Last&quot;]).copy()
+    dropped = before - len(df)
+
+    raw_first = df[&quot;timestamp&quot;].iloc[0]
+    raw_last = df[&quot;timestamp&quot;].iloc[-1]
+    raw_newest_to_oldest = raw_first &gt; raw_last
+    if raw_newest_to_oldest:
+        df = df.iloc[::-1].reset_index(drop=True)
+    else:
+        df = df.reset_index(drop=True)
+
+    # Preserve row order inside duplicated minute stamps. This matters because Sierra exports often
+    # have multiple bars stamped to the same minute.
+    df[&quot;row_order&quot;] = np.arange(len(df), dtype=np.int64)
+    df[&quot;date&quot;] = df[&quot;timestamp&quot;].dt.date
+    df[&quot;tod&quot;] = df[&quot;timestamp&quot;].dt.time
+
+    meta = {
+        &quot;input_file&quot;: str(path),
+        &quot;rows_loaded&quot;: int(len(df)),
+        &quot;dropped_bad_rows&quot;: int(dropped),
+        &quot;raw_first_timestamp&quot;: str(raw_first),
+        &quot;raw_last_timestamp&quot;: str(raw_last),
+        &quot;raw_newest_to_oldest&quot;: bool(raw_newest_to_oldest),
+        &quot;did_reverse&quot;: bool(raw_newest_to_oldest),
+        &quot;chronological_first_timestamp&quot;: str(df[&quot;timestamp&quot;].iloc[0]),
+        &quot;chronological_last_timestamp&quot;: str(df[&quot;timestamp&quot;].iloc[-1]),
+    }
+    return df, meta
+
+
+def mask_time(df: pd.DataFrame, start: time, end: time, inclusive_end: bool = True) -&gt; pd.Series:
+    if inclusive_end:
+        return (df[&quot;tod&quot;] &gt;= start) &amp; (df[&quot;tod&quot;] &lt;= end)
+    return (df[&quot;tod&quot;] &gt;= start) &amp; (df[&quot;tod&quot;] &lt; end)
+
+
+def first_idx_where(g: pd.DataFrame, col: str, value: float) -&gt; int:
+    # For high: first row where High equals max high. For low: first row where Low equals min low.
+    arr = g[col].to_numpy(float)
+    hit = np.flatnonzero(np.isclose(arr, value, rtol=0, atol=1e-9))
+    if len(hit) == 0:
+        return int(g.index[0])
+    return int(g.index[hit[0]])
+
+
+def first_break_after(g: pd.DataFrame, start_pos: int, high_level: float, low_level: float) -&gt; tuple[str, int | None]:
+    # start_pos is index position inside g; scan rows strictly after that position.
+    if start_pos + 1 &gt;= len(g):
+        return &quot;none&quot;, None
+    sub = g.iloc[start_pos + 1:]
+    up = sub[&quot;High&quot;].to_numpy(float) &gt; high_level
+    dn = sub[&quot;Low&quot;].to_numpy(float) &lt; low_level
+    up_pos = int(np.argmax(up)) if up.any() else None
+    dn_pos = int(np.argmax(dn)) if dn.any() else None
+    if up_pos is None and dn_pos is None:
+        return &quot;none&quot;, None
+    if up_pos is not None and dn_pos is not None and up_pos == dn_pos:
+        return &quot;same_bar&quot;, int(sub.index[up_pos])
+    if dn_pos is None or (up_pos is not None and up_pos &lt; dn_pos):
+        return &quot;high_first&quot;, int(sub.index[up_pos])
+    return &quot;low_first&quot;, int(sub.index[dn_pos])
+
+
+def build_daily_study(df: pd.DataFrame, rth_end: time = time(16, 15)) -&gt; pd.DataFrame:
+    form_start = time(9, 30)
+    form_end = time(10, 10)
+    ib_end = time(10, 30)
+
+    rth = df[mask_time(df, form_start, rth_end)].copy()
+    rows = []
+
+    for d, g0 in rth.groupby(&quot;date&quot;, sort=True):
+        g = g0.sort_values([&quot;timestamp&quot;, &quot;row_order&quot;], kind=&quot;mergesort&quot;)
+        form = g[mask_time(g, form_start, form_end)]
+        ib = g[mask_time(g, form_start, ib_end)]
+        post_form = g[g[&quot;tod&quot;] &gt; form_end]
+        post_ib = g[g[&quot;tod&quot;] &gt; ib_end]
+        if len(form) == 0 or len(ib) == 0 or len(g) == 0:
+            continue
+
+        f_high = float(form[&quot;High&quot;].max())
+        f_low = float(form[&quot;Low&quot;].min())
+        f_mid = (f_high + f_low) / 2.0
+        f_hi_idx = first_idx_where(form, &quot;High&quot;, f_high)
+        f_lo_idx = first_idx_where(form, &quot;Low&quot;, f_low)
+        f_hi_pos = int(np.flatnonzero(form.index.to_numpy() == f_hi_idx)[0])
+        f_lo_pos = int(np.flatnonzero(form.index.to_numpy() == f_lo_idx)[0])
+        if f_lo_pos &lt; f_hi_pos:
+            state = &quot;LF&quot;
+        elif f_hi_pos &lt; f_lo_pos:
+            state = &quot;HF&quot;
+        else:
+            state = &quot;SAME_BAR&quot;
+
+        ib_high = float(ib[&quot;High&quot;].max())
+        ib_low = float(ib[&quot;Low&quot;].min())
+        ib_mid = (ib_high + ib_low) / 2.0
+        day_open = float(g.iloc[0][&quot;Open&quot;])
+        day_close = float(g.iloc[-1][&quot;Last&quot;])
+        form_close = float(form.iloc[-1][&quot;Last&quot;])
+
+        # Post formation outcomes.
+        post_form_high_break = bool((post_form[&quot;High&quot;] &gt; f_high).any()) if len(post_form) else False
+        post_form_low_break = bool((post_form[&quot;Low&quot;] &lt; f_low).any()) if len(post_form) else False
+        if len(post_form):
+            # First break of the formation range after 10:10.
+            pf_temp = pd.concat([form.tail(1), post_form])
+            first_form_break, first_form_break_idx = first_break_after(pf_temp, 0, f_high, f_low)
+        else:
+            first_form_break, first_form_break_idx = &quot;none&quot;, None
+
+        # Post IB outcomes.
+        post_ib_high_break = bool((post_ib[&quot;High&quot;] &gt; ib_high).any()) if len(post_ib) else False
+        post_ib_low_break = bool((post_ib[&quot;Low&quot;] &lt; ib_low).any()) if len(post_ib) else False
+        if len(post_ib):
+            pi_temp = pd.concat([ib.tail(1), post_ib])
+            first_ib_break, first_ib_break_idx = first_break_after(pi_temp, 0, ib_high, ib_low)
+        else:
+            first_ib_break, first_ib_break_idx = &quot;none&quot;, None
+
+        rows.append({
+            &quot;date&quot;: d,
+            &quot;state&quot;: state,
+            &quot;formation_start&quot;: &quot;09:30&quot;,
+            &quot;formation_end&quot;: &quot;10:10&quot;,
+            &quot;formation_high&quot;: f_high,
+            &quot;formation_low&quot;: f_low,
+            &quot;formation_mid&quot;: f_mid,
+            &quot;formation_range_pts&quot;: f_high - f_low,
+            &quot;formation_high_first_time&quot;: df.loc[f_hi_idx, &quot;timestamp&quot;],
+            &quot;formation_low_first_time&quot;: df.loc[f_lo_idx, &quot;timestamp&quot;],
+            &quot;formation_close_1010&quot;: form_close,
+            &quot;ib_high&quot;: ib_high,
+            &quot;ib_low&quot;: ib_low,
+            &quot;ib_mid&quot;: ib_mid,
+            &quot;ib_range_pts&quot;: ib_high - ib_low,
+            &quot;day_open&quot;: day_open,
+            &quot;day_close&quot;: day_close,
+            &quot;rth_net_change_pts&quot;: day_close - day_open,
+            &quot;close_change_from_1010_pts&quot;: day_close - form_close,
+            &quot;close_above_formation_mid&quot;: day_close &gt; f_mid,
+            &quot;close_below_formation_mid&quot;: day_close &lt; f_mid,
+            &quot;close_above_ib_mid&quot;: day_close &gt; ib_mid,
+            &quot;close_below_ib_mid&quot;: day_close &lt; ib_mid,
+            &quot;post_1010_break_formation_high&quot;: post_form_high_break,
+            &quot;post_1010_break_formation_low&quot;: post_form_low_break,
+            &quot;post_1010_break_both_formation_sides&quot;: post_form_high_break and post_form_low_break,
+            &quot;post_1010_first_formation_break&quot;: first_form_break,
+            &quot;post_1030_break_ib_high&quot;: post_ib_high_break,
+            &quot;post_1030_break_ib_low&quot;: post_ib_low_break,
+            &quot;post_1030_break_both_ib_sides&quot;: post_ib_high_break and post_ib_low_break,
+            &quot;post_1030_first_ib_break&quot;: first_ib_break,
+            &quot;bullish_close_from_1010&quot;: day_close &gt; form_close,
+            &quot;bearish_close_from_1010&quot;: day_close &lt; form_close,
+        })
+    return pd.DataFrame(rows)
+
+
+def summarize(daily: pd.DataFrame) -&gt; tuple[pd.DataFrame, pd.DataFrame]:
+    outcome_cols = [
+        &quot;post_1010_break_formation_high&quot;,
+        &quot;post_1010_break_formation_low&quot;,
+        &quot;post_1010_break_both_formation_sides&quot;,
+        &quot;post_1030_break_ib_high&quot;,
+        &quot;post_1030_break_ib_low&quot;,
+        &quot;post_1030_break_both_ib_sides&quot;,
+        &quot;close_above_formation_mid&quot;,
+        &quot;close_below_formation_mid&quot;,
+        &quot;close_above_ib_mid&quot;,
+        &quot;close_below_ib_mid&quot;,
+        &quot;bullish_close_from_1010&quot;,
+        &quot;bearish_close_from_1010&quot;,
+    ]
+
+    rows = []
+    for state, g in daily.groupby(&quot;state&quot;, sort=False):
+        n = len(g)
+        row = {&quot;state&quot;: state, &quot;n&quot;: int(n)}
+        for col in outcome_cols:
+            k = int(g[col].sum())
+            lo, hi = wilson_ci(k, n)
+            row[f&quot;{col}__count&quot;] = k
+            row[f&quot;{col}__prob&quot;] = k / n if n else np.nan
+            row[f&quot;{col}__ci95_low&quot;] = lo
+            row[f&quot;{col}__ci95_high&quot;] = hi
+        rows.append(row)
+
+    # Long format is easier to read.
+    long_rows = []
+    for state, g in daily.groupby(&quot;state&quot;, sort=False):
+        n = len(g)
+        for col in outcome_cols:
+            k = int(g[col].sum())
+            lo, hi = wilson_ci(k, n)
+            long_rows.append({
+                &quot;condition&quot;: state,
+                &quot;outcome&quot;: col,
+                &quot;n&quot;: int(n),
+                &quot;count&quot;: k,
+                &quot;probability&quot;: k / n if n else np.nan,
+                &quot;probability_pct&quot;: pct(k / n if n else np.nan),
+                &quot;ci95_low&quot;: lo,
+                &quot;ci95_high&quot;: hi,
+                &quot;ci95_low_pct&quot;: pct(lo),
+                &quot;ci95_high_pct&quot;: pct(hi),
+            })
+
+    # Add first-break categorical distributions.
+    for state, g in daily.groupby(&quot;state&quot;, sort=False):
+        n = len(g)
+        for cat_col in [&quot;post_1010_first_formation_break&quot;, &quot;post_1030_first_ib_break&quot;]:
+            for cat, k in g[cat_col].value_counts(dropna=False).items():
+                lo, hi = wilson_ci(int(k), n)
+                long_rows.append({
+                    &quot;condition&quot;: state,
+                    &quot;outcome&quot;: f&quot;{cat_col}={cat}&quot;,
+                    &quot;n&quot;: int(n),
+                    &quot;count&quot;: int(k),
+                    &quot;probability&quot;: int(k) / n if n else np.nan,
+                    &quot;probability_pct&quot;: pct(int(k) / n if n else np.nan),
+                    &quot;ci95_low&quot;: lo,
+                    &quot;ci95_high&quot;: hi,
+                    &quot;ci95_low_pct&quot;: pct(lo),
+                    &quot;ci95_high_pct&quot;: pct(hi),
+                })
+
+    return pd.DataFrame(rows), pd.DataFrame(long_rows)
+
+
+def main() -&gt; None:
+    ap = argparse.ArgumentParser()
+    ap.add_argument(&quot;--file&quot;, default=&quot;/mnt/data/mnq lt 2.csv&quot;)
+    ap.add_argument(&quot;--out-dir&quot;, default=&quot;/mnt/data/lf_hf_no_quartile_probability_output&quot;)
+    ap.add_argument(&quot;--rth-end&quot;, default=&quot;16:15&quot;, help=&quot;RTH/session end time HH:MM. Default 16:15.&quot;)
+    args = ap.parse_args()
+
+    out = Path(args.out_dir)
+    out.mkdir(parents=True, exist_ok=True)
+    hh, mm = [int(x) for x in args.rth_end.split(&quot;:&quot;)]
+    rth_end = time(hh, mm)
+
+    df, meta = load_data(args.file)
+    daily = build_daily_study(df, rth_end=rth_end)
+    wide, long = summarize(daily)
+
+    meta.update({
+        &quot;rth_end&quot;: args.rth_end,
+        &quot;formation_window&quot;: &quot;09:30-10:10 inclusive&quot;,
+        &quot;ib_window&quot;: &quot;09:30-10:30 inclusive&quot;,
+        &quot;days_analyzed&quot;: int(len(daily)),
+        &quot;state_counts&quot;: daily[&quot;state&quot;].value_counts(dropna=False).to_dict() if len(daily) else {},
+        &quot;note&quot;: &quot;Pure probability model. No entry/stop/target/PnL logic included.&quot;,
+    })
+
+    daily.to_csv(out / &quot;daily_lf_hf_classifications_and_outcomes.csv&quot;, index=False)
+    wide.to_csv(out / &quot;summary_wide_probabilities.csv&quot;, index=False)
+    long.to_csv(out / &quot;summary_long_probabilities_with_ci.csv&quot;, index=False)
+    (out / &quot;run_metadata.json&quot;).write_text(json.dumps(meta, indent=2, default=str))
+
+    print(json.dumps(meta, indent=2, default=str))
+    print(&quot;\nSUMMARY LONG - core directional outcomes&quot;)
+    core = long[long[&quot;outcome&quot;].isin([
+        &quot;post_1010_break_formation_high&quot;,
+        &quot;post_1010_break_formation_low&quot;,
+        &quot;post_1030_break_ib_high&quot;,
+        &quot;post_1030_break_ib_low&quot;,
+        &quot;close_above_ib_mid&quot;,
+        &quot;close_below_ib_mid&quot;,
+        &quot;bullish_close_from_1010&quot;,
+        &quot;bearish_close_from_1010&quot;,
+    ])].copy()
+    core[&quot;probability_pct&quot;] = core[&quot;probability_pct&quot;].round(2)
+    core[&quot;ci95_low_pct&quot;] = core[&quot;ci95_low_pct&quot;].round(2)
+    core[&quot;ci95_high_pct&quot;] = core[&quot;ci95_high_pct&quot;].round(2)
+    print(core[[&quot;condition&quot;, &quot;outcome&quot;, &quot;n&quot;, &quot;count&quot;, &quot;probability_pct&quot;, &quot;ci95_low_pct&quot;, &quot;ci95_high_pct&quot;]].to_string(index=False))
+
+    print(f&quot;\nOutputs written to: {out}&quot;)
+
+
+if __name__ == &quot;__main__&quot;:
+    main()
+</textarea></div></div><footer class="container footer"><div><a class="logo" href="../index.html"><span class="logo-mark">JJR</span><span class="logo-word">Analytica</span></a><p class="small">Institutional research for intraday traders.</p></div><div><h4>Research</h4><p><a href="../research.html">All Studies</a></p><p><a href="../study-logic.html">Study Logic</a></p><p><a href="../math-framework.html">Math Notes</a></p></div><div><h4>Company</h4><p><a href="../methodology.html">Methodology</a></p><p><a href="../about.html">About</a></p><p><a href="../disclosures.html">Disclosures</a></p></div><div id="join"><h4>Join the Research List</h4><p class="small">Get notified when new studies are published.</p><form class="email-box"><input placeholder="Email address" type="email"><button>→</button></form></div></footer><div class="disclaimer">Educational research only. Not financial advice.</div><script>(function(){const modal=document.querySelector('[data-code-modal]');const openBtn=document.querySelector('[data-open-code]');const closeBtn=document.querySelector('[data-close-code]');const copyBtn=document.querySelector('[data-copy-code]');const codeBlock=document.querySelector('[data-code-block]');const status=document.querySelector('[data-copy-status]');if(!modal||!openBtn)return;function openModal(){modal.classList.add('open');modal.setAttribute('aria-hidden','false')}function closeModal(){modal.classList.remove('open');modal.setAttribute('aria-hidden','true');if(status)status.textContent=''}openBtn.addEventListener('click',openModal);if(closeBtn)closeBtn.addEventListener('click',closeModal);modal.addEventListener('click',e=>{if(e.target===modal)closeModal()});document.addEventListener('keydown',e=>{if(e.key==='Escape')closeModal()});if(copyBtn&&codeBlock){copyBtn.addEventListener('click',async()=>{try{await navigator.clipboard.writeText(codeBlock.value||codeBlock.textContent);if(status)status.textContent='Copied'}catch(err){if(status)status.textContent='Select text'}})}})();</script></body></html>
